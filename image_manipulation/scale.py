@@ -1,19 +1,24 @@
 from PIL import Image
 import numpy as np
 
-im = Image.open( "fruit_fade.png" )
-pix = np.array(im)
+original_image = Image.open("fruit_fade.png")
+pixel_array = np.array(original_image)
 
 # get the maximum value
-minimum = np.min(pix)
-maximum = np.max(pix)
+maximum = np.max(pixel_array)
 
 # calculate the scaling factor
-scale = 255.0/(maximum - minimum)
+scale = 255.0/maximum
 
-# create the new 2D array with list comprehension
-new_pix = [[(pixel - minimum) * scale for pixel in row] for row in pix]
-new_pix = np.array(new_pix).astype('uint8')
+# create the new 2D array
+new_pixel_array = []
+for row in pixel_array:
+    new_row = []
+    for pixel in row:
+        new_row.append(pixel * scale)
+    new_pixel_array.append(new_row)
 
-im2 = Image.fromarray(new_pix)
-im2.show()
+new_pixel_array = np.array(new_pixel_array).astype('uint8')
+
+scaled_image = Image.fromarray(new_pixel_array)
+scaled_image.show()
